@@ -15,9 +15,40 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        class1.cpp \
         main.cpp
+
+
+HOME = $$system(echo $HOME)
+COMMON_LIBS = commonlib
+
+#unix:!macx: LIBS += -L/home/zoli/build-common-Desktop_Qt_5_12_2_GCC_64bit2-Debug/stringhelper/ -lstringhelper
+unix:!macx:
+{
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lstringhelper
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lfilehelper
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lzlog
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lmacrofactory
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lshortguid
+LIBS += -L$$HOME/$$COMMON_LIBS/ -linihelper
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lsettingshelper
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lxmlhelper
+}
+
+QMAKE_LFLAGS += -Wl,-rpath,"/$$HOME/$$COMMON_LIBS"
+#QMAKE_LFLAGS += -Wl,-rpath,"/$$HOME/$$INSTALLDIR/macrofactory"
+#QMAKE_LFLAGS += -Wl,-rpath,"/home/zoli/build-common-Desktop_Qt_5_9_0_GCC_64bit-Debug/stringhelper"
+#QMAKE_LFLAGS += -Wl,-rpath,"/home/zoli/build-common-Desktop_Qt_5_9_0_GCC_64bit-Debug/macrofactory"
+#QMAKE_LFLAGS += -Wl,-rpath,"/home/zoli/build-common-Desktop_Qt_5_12_2_GCC_64bit2-Debug/stringhelper"
+#QMAKE_LFLAGS += -Wl,-rpath,"/home/zoli/build-common-Desktop_Qt_5_12_2_GCC_64bit2-Debug/macrofactory"
+INCLUDEPATH += /$$HOME/common
+DEPENDPATH += /$$HOME/common
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    class1.h
