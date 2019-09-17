@@ -1,6 +1,6 @@
 QT -= gui
 
-CONFIG += c++11 console
+CONFIG += c++17 console
 CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
@@ -16,8 +16,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         appworker.cpp \
-        main.cpp \
-        signalhelper.cpp
+        main.cpp
+#\
+#        signalhelper.cpp
 
 
 unix:HOME = $$system(echo $HOME)
@@ -28,17 +29,20 @@ COMMON_LIBS = commonlib
 #unix:!macx: LIBS += -L/home/zoli/build-common-Desktop_Qt_5_12_2_GCC_64bit2-Debug/stringhelper/ -lstringhelper
 unix:!macx:
 {
-LIBS += -L$$HOME/$$COMMON_LIBS/ -lstringhelper
-LIBS += -L$$HOME/$$COMMON_LIBS/ -lfilehelper
 LIBS += -L$$HOME/$$COMMON_LIBS/ -llogger
-LIBS += -L$$HOME/$$COMMON_LIBS/ -lmacrofactory
-LIBS += -L$$HOME/$$COMMON_LIBS/ -lshortguid
-LIBS += -L$$HOME/$$COMMON_LIBS/ -linihelper
-LIBS += -L$$HOME/$$COMMON_LIBS/ -lsettingshelper
-LIBS += -L$$HOME/$$COMMON_LIBS/ -lxmlhelper
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lsignalhelper
+#LIBS += -L$$HOME/$$COMMON_LIBS/ -lstringhelper
+#LIBS += -L$$HOME/$$COMMON_LIBS/ -lfilehelper
+#LIBS += -L$$HOME/$$COMMON_LIBS/ -lmacrofactory
+#LIBS += -L$$HOME/$$COMMON_LIBS/ -lshortguid
+#LIBS += -L$$HOME/$$COMMON_LIBS/ -linihelper
+#LIBS += -L$$HOME/$$COMMON_LIBS/ -lsettingshelper
+#LIBS += -L$$HOME/$$COMMON_LIBS/ -lxmlhelper
 }
 
-QMAKE_LFLAGS += -Wl,-rpath,"$$HOME/$$COMMON_LIBS"
+# unix:QMAKE_RPATHDIR += /usr/mylib
+# QMAKE_LFLAGS += -Wl,-rpath, "$$system_path($$HOME/$$INSTALLDIR)"
+#QMAKE_LFLAGS += -Wl,-rpath,"$$HOME/$$COMMON_LIBS"
 #QMAKE_LFLAGS += -Wl,-rpath,"/$$HOME/$$INSTALLDIR/macrofactory"
 #QMAKE_LFLAGS += -Wl,-rpath,"/home/zoli/build-common-Desktop_Qt_5_9_0_GCC_64bit-Debug/stringhelper"
 #QMAKE_LFLAGS += -Wl,-rpath,"/home/zoli/build-common-Desktop_Qt_5_9_0_GCC_64bit-Debug/macrofactory"
@@ -55,5 +59,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    appworker.h \
-    signalhelper.h
+    appworker.h
+
+#\
+#    signalhelper.h

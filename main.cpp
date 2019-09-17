@@ -1,14 +1,13 @@
 #include <QCommandLineParser>
 #include <QCoreApplication>
-#include <QTimer>
 #include "common/logger/log.h"
 #include "appworker.h"
-#include "signalhelper.h"
+#include "common/helper/signalhelper/signalhelper.h"
 
 int main(int argc, char *argv[])
 {
-    helpers::SignalHelper::setShutDownSignal(helpers::SignalHelper::SIGINT_); // shut down on ctrl-c
-    helpers::SignalHelper::setShutDownSignal(helpers::SignalHelper::SIGTERM_); // shut down on killall
+    com::helper::SignalHelper::setShutDownSignal(com::helper::SignalHelper::SIGINT_); // shut down on ctrl-c
+    com::helper::SignalHelper::setShutDownSignal(com::helper::SignalHelper::SIGTERM_); // shut down on killall
 
     zInfo(QStringLiteral("started"));
 
@@ -54,6 +53,7 @@ int main(int argc, char *argv[])
     QObject::connect(&c, &AppWorker::finished,&app, &QCoreApplication::quit, Qt::QueuedConnection);
 
     c.run();
+    // TODO exec mitől igaz vagy hamis
     auto e = QCoreApplication::exec();
     return e;
 }
