@@ -2,10 +2,14 @@
 #include <QCoreApplication>
 #include <QTimer>
 #include "common/logger/log.h"
-#include "class1.h"
+#include "appworker.h"
+#include "signalhelper.h"
 
 int main(int argc, char *argv[])
 {
+    helpers::SignalHelper::setShutDownSignal(helpers::SignalHelper::SIGINT_); // shut down on ctrl-c
+    helpers::SignalHelper::setShutDownSignal(helpers::SignalHelper::SIGTERM_); // shut down on killall
+
     zInfo(QStringLiteral("started"));
 
     QCoreApplication app(argc, argv);
@@ -16,6 +20,7 @@ int main(int argc, char *argv[])
     parser.addHelpOption();
     parser.addVersionOption();
 
+    // -m
     QCommandLineOption m_opt(
         QStringList {"m" , "message"},
         QStringLiteral("translated messages"),
@@ -23,6 +28,7 @@ int main(int argc, char *argv[])
         );
     parser.addOption(m_opt);
 
+    // -s
     QCommandLineOption s_opt(
         QStringList {"s", "source"},
         QStringLiteral("source file"),
@@ -41,15 +47,13 @@ int main(int argc, char *argv[])
 
     QString lFileName = parser.value(m_opt);
     QString sFileName = parser.value(s_opt);
-    bool isBackup= parser.isSet(b_opt);
+    bool isBackup= parser.isSet(b_opt);    
 
-    zInfo(QStringLiteral("params: %1 %2 %3").arg(lFileName).arg(sFileName).arg(isBackup));
+    AppWorker c;
+    // break event loop
+    QObject::connect(&c, &AppWorker::finished,&app, &QCoreApplication::quit, Qt::QueuedConnection);
 
-    Class1 c;
-    QObject::connect(&c, SIGNAL(finished()), &app, SLOT(quit()));
-    QTimer::singleShot(0, &c, SLOT(run()));
-
+    c.run();
     auto e = QCoreApplication::exec();
-
     return e;
 }

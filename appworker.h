@@ -3,15 +3,13 @@
 
 #include <QObject>
 
-
-
-class Class1: public QObject
+class AppWorker: public QObject
 {
     Q_OBJECT
 public:
-    Class1();
+    AppWorker();
     void doWork();
-private slots:
+public slots:
     void run();
 signals:
     void finished();

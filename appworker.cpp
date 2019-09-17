@@ -1,20 +1,20 @@
-#include "class1.h"
+#include "appworker.h"
 #include <QDebug>
 
-Class1::Class1()
+AppWorker::AppWorker()
 {
 
-    qDebug() << "new Class1";
+    qDebug() << "new AppWorker";
 }
 
-void Class1::doWork()
+void AppWorker::doWork()
 {
     auto m = new char[40];
     m=new char[2];
     qDebug() << "Class1 doWork()";
 }
 
-void Class1::run()
+void AppWorker::run()
 {
     doWork();
     // Same implementation as before
