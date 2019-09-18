@@ -1,24 +1,35 @@
 #include "appworker.h"
+#include <QCoreApplication>
 #include <QDebug>
 
-AppWorker::AppWorker()
-{
+int (*CoreAppWorker::workerFn)();
+QCommandLineParser* CoreAppWorker::parser;
 
-    qDebug() << "new AppWorker";
+CoreAppWorker::CoreAppWorker(int (*fn)(), QCoreApplication *app, QCommandLineParser *p)
+{
+    workerFn = fn;
+    parser = p;
+    QObject::connect(this, &CoreAppWorker::finished, app, &QCoreApplication::quit, Qt::QueuedConnection);
+    //qDebug() << "new AppWorker";
 }
 
-void AppWorker::doWork()
+int CoreAppWorker::doWork()
 {
-    auto m = new char[40];
-    m=new char[2];
+    //int e = *workerFn();
+    //auto m = new char[40];
+    //m=new char[2];
     qDebug() << "Class1 doWork()";
+    //qDebug() << "worker called";
+    return 0;
 }
 
-void AppWorker::run()
+int CoreAppWorker::run()
 {
-    doWork();
+    //doWork();
+    int e = workerFn();
     // Same implementation as before
     // Emit signal when finished
     emit finished();
+    return e;
 }
 

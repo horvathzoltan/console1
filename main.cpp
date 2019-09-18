@@ -3,6 +3,9 @@
 #include "common/logger/log.h"
 #include "appworker.h"
 #include "common/helper/signalhelper/signalhelper.h"
+#include "common/helper/CommandLineParserHelper/commandlineparserhelper.h"
+#include "common/coreappworker/coreappworker.h"
+#include "work1.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,48 +15,32 @@ int main(int argc, char *argv[])
     zInfo(QStringLiteral("started"));
 
     QCoreApplication app(argc, argv);
+    QCoreApplication::setApplicationName(QStringLiteral("test1"));
 
     QCommandLineParser parser;
-    QCoreApplication::setApplicationName(QStringLiteral("test1"));
+
     parser.setApplicationDescription(QStringLiteral("command line test1 app."));
     parser.addHelpOption();
-    parser.addVersionOption();
+    parser.addVersionOption();  
 
-    // -m
-    QCommandLineOption m_opt(
-        QStringList {"m" , "message"},
-        QStringLiteral("translated messages"),
-        QStringLiteral("messages")
-        );
-    parser.addOption(m_opt);
+    const QString OPTION_IN = QStringLiteral("input");
+    const QString OPTION_OUT = QStringLiteral("output");
+    const QString OPTION_BACKUP = QStringLiteral("backup");
 
-    // -s
-    QCommandLineOption s_opt(
-        QStringList {"s", "source"},
-        QStringLiteral("source file"),
-        QStringLiteral("source")
-        );
-
-    parser.addOption(s_opt);
-
-    QCommandLineOption b_opt(
-        QStringLiteral("backup"),
-        QStringLiteral("backup file"));
-
-    parser.addOption(b_opt);
+    com::helper::CommandLineParserHelper::addOption(&parser, OPTION_IN, QStringLiteral("gerber file as input"));
+    com::helper::CommandLineParserHelper::addOption(&parser, OPTION_OUT, QStringLiteral("csv file as output"));
+    com::helper::CommandLineParserHelper::addOptionBool(&parser, OPTION_BACKUP, QStringLiteral("set if backup is needed"));
 
     parser.process(app);
 
-    QString lFileName = parser.value(m_opt);
-    QString sFileName = parser.value(s_opt);
-    bool isBackup= parser.isSet(b_opt);    
+    // statikus, számítunk arra, hogy van
+    Work1::params.inFile = parser.value(OPTION_IN);
+    Work1::params.outFile = parser.value(OPTION_OUT);
+    Work1::params.isBackup = parser.isSet(OPTION_BACKUP);
 
-    AppWorker c;
-    // break event loop
-    QObject::connect(&c, &AppWorker::finished,&app, &QCoreApplication::quit, Qt::QueuedConnection);
-
+    com::CoreAppWorker c(Work1::doWork,&app, &parser);
     c.run();
-    // TODO exec mitől igaz vagy hamis
+
     auto e = QCoreApplication::exec();
     return e;
 }

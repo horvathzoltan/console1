@@ -15,8 +15,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        appworker.cpp \
-        main.cpp
+        #appworker.cpp \
+        main.cpp \
+        work1.cpp
 #\
 #        signalhelper.cpp
 
@@ -31,6 +32,8 @@ unix:!macx:
 {
 LIBS += -L$$HOME/$$COMMON_LIBS/ -llogger
 LIBS += -L$$HOME/$$COMMON_LIBS/ -lsignalhelper
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lCommandLineParserHelper
+LIBS += -L$$HOME/$$COMMON_LIBS/ -lcoreappworker
 #LIBS += -L$$HOME/$$COMMON_LIBS/ -lstringhelper
 #LIBS += -L$$HOME/$$COMMON_LIBS/ -lfilehelper
 #LIBS += -L$$HOME/$$COMMON_LIBS/ -lmacrofactory
@@ -59,7 +62,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    appworker.h
+    #appworker.h \
+    work1.h
 
 #\
 #    signalhelper.h

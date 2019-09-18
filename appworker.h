@@ -2,17 +2,21 @@
 #define CLASS1_H
 
 #include <QObject>
+#include <QCommandLineParser>
 
-class AppWorker: public QObject
+class CoreAppWorker: public QObject
 {
-    Q_OBJECT
+    Q_OBJECT    
 public:
-    AppWorker();
-    void doWork();
+    CoreAppWorker(int (*fn)(), QCoreApplication *app, QCommandLineParser *parser);
+    int doWork();
 public slots:
-    void run();
+    int run();
 signals:
     void finished();
+private:
+    static int (*workerFn)();
+    static QCommandLineParser* parser;
 };
 
 #endif // CLASS1_H
