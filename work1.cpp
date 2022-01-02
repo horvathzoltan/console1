@@ -47,8 +47,6 @@ auto Work1::Result::ToString() -> QString
     if(state==NoResult) return nameof(NoResult);
     if(state==NotCalculated) return nameof(NotCalculated);
     return QStringLiteral("unknown");
-
-
 }
 
 auto Work1::doWork() -> Result

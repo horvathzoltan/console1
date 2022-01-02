@@ -91,12 +91,10 @@ INCLUDEPATH += $$HOME/common
 DEPENDPATH += $$HOME/common
 
 SOURCES += \
-        coreappworker2.cpp \
         main.cpp \
         work1.cpp
 
 HEADERS += \
-    coreappworker2.h \
     work1.h
 
 message(includepath = $$INCLUDEPATH)

@@ -35,7 +35,7 @@ auto main(int argc, char *argv[]) -> int
 
     parser.process(app);
 
-    bool isEventLoopNeeded = true;
+    bool isEventLoopNeeded = false;
 
     auto w1 =  new Work1(isEventLoopNeeded);
 
@@ -50,13 +50,13 @@ auto main(int argc, char *argv[]) -> int
     }
 
     //Work1::Result a;
-    //a = w1->doWork(); // indítás direkt
-    w1->start(); // indítás szálon
+    auto a = w1->doWork(); // indítás direkt
+    //w1->start(); // indítás szálon
     zInfo(QStringLiteral("waiting..."));
 
     int e = isEventLoopNeeded?QCoreApplication::exec():0;
 
-    zInfo(w1->result.ToString());
+    zInfo(a.ToString());
 
     if(w1->result.state==Work1::Result::State::NotCalculated &&
         !isEventLoopNeeded) zInfo(QStringLiteral("NoEventLoop"));
